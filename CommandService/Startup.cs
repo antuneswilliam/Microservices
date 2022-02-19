@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CommandService.AsyncBusSubscriber;
 using CommandService.Data;
 using CommandService.EventProcessing;
+using CommandService.SyncDataServices.Grpc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -40,6 +41,8 @@ namespace CommandService
 
             services.AddHostedService<MessageBusSubscriber>();
 
+            services.AddScoped<IPlatformDataClient, PlatformDataClient>();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -67,6 +70,8 @@ namespace CommandService
             {
                 endpoints.MapControllers();
             });
+
+            PrepDb.PrepPopulation(app);
         }
     }
 }
